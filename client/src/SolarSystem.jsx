@@ -23,9 +23,9 @@ const SolarSystem = () => {
     const fov = 75;
     const aspect = w / h;
     const near = 0.1;
-    const far = 500;
+    const far = 1000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 20, 50);
+    camera.position.set(0, 30, 80);
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -34,7 +34,7 @@ const SolarSystem = () => {
     // Orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.03;
+    controls.dampingFactor = 0.05;
     controls.enableZoom = true;
     controls.enablePan = true;
     controls.target.set(0, 0, 0);
@@ -67,7 +67,7 @@ const SolarSystem = () => {
     // );
 
     // Sun
-    const sunGeo = new THREE.SphereGeometry(5, 64, 64);
+    const sunGeo = new THREE.SphereGeometry(10, 64, 64);
     const sunMat = new THREE.MeshBasicMaterial({
       map: sunTexture,
       roughness: 1,
@@ -79,7 +79,7 @@ const SolarSystem = () => {
     scene.add(sunMesh);
 
     // Lighting to simulate the Sun's effect
-    const sunLight = new THREE.PointLight(0xffffff, 200, 700);
+    const sunLight = new THREE.PointLight(0xffffff, 1, 1000);
     sunLight.position.set(0, 0, 0);
     sunLight.castShadow = true;  // Enable shadow casting for Sun
     scene.add(sunLight);
@@ -94,7 +94,7 @@ const SolarSystem = () => {
     scene.add(earthOrbit);
 
     // Earth
-    const earthGeo = new THREE.SphereGeometry(1, 64, 64);
+    const earthGeo = new THREE.SphereGeometry(2, 64, 64);
     const earthMat = new THREE.MeshStandardMaterial({
       map: earthTexture,
       specular: 0x333333,
@@ -105,7 +105,7 @@ const SolarSystem = () => {
       metalness: 0,
     });
     const earthMesh = new THREE.Mesh(earthGeo, earthMat);
-    earthMesh.position.set(20, 0, 0);
+    earthMesh.position.set(40, 0, 0);
     earthMesh.castShadow = true;  // Cast shadows from Earth
     earthMesh.receiveShadow = true;
     earthOrbit.add(earthMesh);
@@ -116,16 +116,16 @@ const SolarSystem = () => {
     earthMesh.add(moonOrbit);
 
     // Moon
-    const moonGeo = new THREE.SphereGeometry(0.27, 64, 64);
+    const moonGeo = new THREE.SphereGeometry(0.5, 64, 64);
     const moonMat = new THREE.MeshPhongMaterial({
       map: moonTexture,
     });
     const moonMesh = new THREE.Mesh(moonGeo, moonMat);
-    moonMesh.position.set(2, 0, 0);
+    moonMesh.position.set(4, 0, 0);
     moonOrbit.add(moonMesh);
 
     // Create Earth's orbit path (circular)
-    const orbitRadius = 20;
+    const orbitRadius = 40;
     const orbitSegments = 100;
     const orbitGeometry = new THREE.BufferGeometry();
     const orbitVertices = [];
@@ -172,8 +172,8 @@ const SolarSystem = () => {
     const animate = (t = 0) => {
       requestAnimationFrame(animate);
       earthMesh.rotation.y = t * 0.001;
-      earthOrbit.rotation.y = t * 0.001;
-      moonOrbit.rotation.y = t * 0.001;
+      earthOrbit.rotation.y = t * 0.0001;
+      moonOrbit.rotation.y = t * 0.0015;
       controls.update();
       renderer.render(scene, camera);
     };
