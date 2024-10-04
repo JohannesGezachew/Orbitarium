@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+import earthTextureUrl from './assets/earthmap1k.jpg';
+import sunTextureUrl from './assets/sunmap.jpg';
+import moonTextureUrl from './assets/moonmap1k.jpg';
+
 const SolarSystem = () => {
   const mountRef = useRef(null);
 
@@ -37,25 +41,52 @@ const SolarSystem = () => {
 
     // Load textures for Sun, Earth, and Moon
     const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load('earthmap1k.jpg', () => console.log('Earth texture loaded!'));
-    const sunTexture = textureLoader.load('sunmap.jpg', () => console.log('Sun texture loaded!'));
-    const moonTexture = textureLoader.load('moonmap1k.jpg', () => console.log('Moon texture loaded!'));
+    const earthTexture = textureLoader.load(earthTextureUrl);
+    const sunTexture = textureLoader.load(sunTextureUrl);
+    const moonTexture = textureLoader.load(moonTextureUrl);
+
+    // const earthTexture = textureLoader.load(
+    //   '/assets/earthmap1k.jpg',
+    //   () => console.log('Earth texture loaded!'),
+    //   undefined,
+    //   (error) => console.error('Error loading Earth texture:', error)
+    // );
+
+    // const sunTexture = textureLoader.load(
+    //   '/assets/sunmap.jpg',
+    //   () => console.log('Sun texture loaded!'),
+    //   undefined,
+    //   (error) => console.error('Error loading Sun texture:', error)
+    // );
+
+    // const moonTexture = textureLoader.load(
+    //   '/assets/moonmap1k.jpg',
+    //   () => console.log('Moon texture loaded!'),
+    //   undefined,
+    //   (error) => console.error('Error loading Moon texture:', error)
+    // );
 
     // Sun
     const sunGeo = new THREE.SphereGeometry(5, 64, 64);
     const sunMat = new THREE.MeshBasicMaterial({
       map: sunTexture,
-      emissive: 0xffff00,
-      emissiveIntensity: 1,
+      roughness: 1,
+      metalness: 0.5,
+      emissiveIntensity: 2,
     });
     const sunMesh = new THREE.Mesh(sunGeo, sunMat);
     sunMesh.position.set(0, 0, 0);
     scene.add(sunMesh);
 
     // Lighting to simulate the Sun's effect
-    const sunLight = new THREE.PointLight(0xffffff, 200, 500);
+    const sunLight = new THREE.PointLight(0xffffff, 200, 700);
     sunLight.position.set(0, 0, 0);
+    sunLight.castShadow = true;  // Enable shadow casting for Sun
     scene.add(sunLight);
+
+    // Add Ambient light for softer global lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    scene.add(ambientLight);
 
     // Create Earth's orbit pivot
     const earthOrbit = new THREE.Object3D();
@@ -64,17 +95,19 @@ const SolarSystem = () => {
 
     // Earth
     const earthGeo = new THREE.SphereGeometry(1, 64, 64);
-    const earthMat = new THREE.MeshPhongMaterial({
+    const earthMat = new THREE.MeshStandardMaterial({
       map: earthTexture,
       specular: 0x333333,
       shininess: 10,
       emissive: 0x000000,
       emissiveIntensity: 0.1,
-      roughness: 1,
+      roughness: 0.7, // Control surface roughness for realistic shading
       metalness: 0,
     });
     const earthMesh = new THREE.Mesh(earthGeo, earthMat);
     earthMesh.position.set(20, 0, 0);
+    earthMesh.castShadow = true;  // Cast shadows from Earth
+    earthMesh.receiveShadow = true;
     earthOrbit.add(earthMesh);
 
     // Create Moon's orbit pivot
@@ -103,7 +136,7 @@ const SolarSystem = () => {
       const z = Math.sin(angle) * orbitRadius;
       orbitVertices.push(x, 0, z);
     }
-
+// Convert the vertices into a Float32Array for BufferGeometry
     orbitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(orbitVertices, 3));
     const orbitMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
     const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
@@ -133,9 +166,7 @@ const SolarSystem = () => {
     };
     createFarStarfield();
 
-    // Ambient light
-    const ambientLight = new THREE.AmbientLight(0x404040, [0.7]);
-    scene.add(ambientLight);
+
 
     // Animation loop
     const animate = (t = 0) => {
