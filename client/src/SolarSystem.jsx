@@ -59,7 +59,7 @@ const SolarSystem = () => {
     const near = 0.1;
     const far = 100000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 50, 1000);
+    camera.position.set(0, 50, 500);
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -167,13 +167,13 @@ const SolarSystem = () => {
     };
 
     const mercury = createPlanet(1.0, mercuryTexture, 40, 0.01);
-    const venus = createPlanet(1.7, venusTexture, 70, 0.008);
-    const earth = createPlanet(2, earthTexture, 100, 0.005);
-    const mars = createPlanet(1.2, marsTexture, 150, 0.003);
-    const jupiter = createPlanet(4, jupiterTexture, 250, 0.002);
-    const saturn = createPlanet(3.5, saturnTexture, 400, 0.0018);
-    const uranus = createPlanet(3, uranusTexture, 600, 0.0012);
-    const neptune = createPlanet(3, neptuneTexture, 800, 0.001);
+    const venus = createPlanet(1.7, venusTexture, 60, 0.008);
+    const earth = createPlanet(2, earthTexture, 80, 0.005);
+    const mars = createPlanet(1.2, marsTexture, 100, 0.003);
+    const jupiter = createPlanet(4, jupiterTexture, 130, 0.002);
+    const saturn = createPlanet(3.5, saturnTexture, 160, 0.0018);
+    const uranus = createPlanet(3, uranusTexture, 190, 0.0012);
+    const neptune = createPlanet(3, neptuneTexture, 220, 0.001);
 
 
 
@@ -208,13 +208,13 @@ const SolarSystem = () => {
     // Adding realistic rings with tilts
 
     // Add rings to Jupiter (tilt of 3.1 degrees)
-    createRingWithTilt(9, 15, jupiterRingTexture, jupiter.mesh, 3.1, 0);
+    createRingWithTilt(5, 9, jupiterRingTexture, jupiter.mesh, 3.1, 0);
 
     // Add rings to Saturn (tilt of 26.7 degrees)
-    createRingWithTilt(9, 18, saturnRingTexture, saturn.mesh, 26.7, 0);
+    createRingWithTilt(5, 10, saturnRingTexture, saturn.mesh, 26.7, 0);
 
     // Add rings to Uranus (tilt of 97.8 degrees, extreme tilt)
-    createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
+    createRingWithTilt(5, 10, uranusRingTexture, uranus.mesh, 97.8, 0);
 
     // Add rings to Neptune (tilt of 28.3 degrees)
     // createRingWithTilt(7, 14, neptuneRingTexture, neptune.mesh, 28.3, 0);
@@ -246,10 +246,10 @@ const SolarSystem = () => {
     };
 
     // Different colors for each orbit
-    const orbitColors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0xffa500];
+    const orbitColors = [0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500];
 
     // Distances for each planet's orbit
-    const orbitDistances = [40, 70, 100, 150, 250, 400, 600, 800];
+    const orbitDistances = [40, 60, 80, 100, 130, 160, 190, 220];
 
     // Create orbits with different colors
     orbitDistances.forEach((distance, index) => {
@@ -323,32 +323,32 @@ const SolarSystem = () => {
       mercury.mesh.rotation.y += 0.01;
 
       venus.angle += earthBaseSpeed * (365 / 225);  // Venus takes 225 days
-      venus.mesh.position.set(Math.cos(venus.angle) * 70, 0, Math.sin(venus.angle) * 70);
+      venus.mesh.position.set(Math.cos(venus.angle) * 60, 0, Math.sin(venus.angle) * 60);
       venus.mesh.rotation.y += 0.01;
 
       earth.angle += earthBaseSpeed;  // Earth's speed as base
-      earth.mesh.position.set(Math.cos(earth.angle) * 100, 0, Math.sin(earth.angle) * 100);
+      earth.mesh.position.set(Math.cos(earth.angle) * 80, 0, Math.sin(earth.angle) * 80);
       earth.mesh.rotation.y += 0.01;
-      // moonOrbit.rotation.y = t * 0.0015;
+      moonOrbit.rotation.y = t * 0.0015;
 
       mars.angle += earthBaseSpeed * (365 / 687);  // Mars takes 687 days
-      mars.mesh.position.set(Math.cos(mars.angle) * 150, 0, Math.sin(mars.angle) * 150);
+      mars.mesh.position.set(Math.cos(mars.angle) * 100, 0, Math.sin(mars.angle) * 100);
       mars.mesh.rotation.y += 0.01;
 
       jupiter.angle += earthBaseSpeed * (365 / 4333);  // Jupiter takes 4333 days
-      jupiter.mesh.position.set(Math.cos(jupiter.angle) * 250, 0, Math.sin(jupiter.angle) * 250);
+      jupiter.mesh.position.set(Math.cos(jupiter.angle) * 130, 0, Math.sin(jupiter.angle) * 130);
       jupiter.mesh.rotation.y += 0.01;
 
       saturn.angle += earthBaseSpeed * (365 / 10759);  // Saturn takes 10759 days
-      saturn.mesh.position.set(Math.cos(saturn.angle) * 400, 0, Math.sin(saturn.angle) * 400);
+      saturn.mesh.position.set(Math.cos(saturn.angle) * 160, 0, Math.sin(saturn.angle) * 160);
       saturn.mesh.rotation.y += 0.01;
 
       uranus.angle += earthBaseSpeed * (365 / 30687);  // Uranus takes 30687 days
-      uranus.mesh.position.set(Math.cos(uranus.angle) * 600, 0, Math.sin(uranus.angle) * 600);
+      uranus.mesh.position.set(Math.cos(uranus.angle) * 190, 0, Math.sin(uranus.angle) * 190);
       uranus.mesh.rotation.y += 0.01;
 
       neptune.angle += earthBaseSpeed * (365 / 60190);  // Neptune takes 60190 days
-      neptune.mesh.position.set(Math.cos(neptune.angle) * 800, 0, Math.sin(neptune.angle) * 800);
+      neptune.mesh.position.set(Math.cos(neptune.angle) * 220, 0, Math.sin(neptune.angle) * 220);
       neptune.mesh.rotation.y += 0.01;
 
       // Update controls and render scene
