@@ -59,7 +59,7 @@ const SolarSystem = () => {
     const near = 0.1;
     const far = 100000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 500, 1000);
+    camera.position.set(0, 50, 1000);
 
     // Scene setup
     const scene = new THREE.Scene();
