@@ -112,12 +112,30 @@ const SolarSystem = () => {
 
 
 
-    // Earth orbit visualization
-    const earthOrbitGeo = new THREE.RingGeometry(39.99, 40., 64);
-    const orbitMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-    const earthOrbit = new THREE.Mesh(earthOrbitGeo, orbitMaterial);
-    earthOrbit.rotation.x = Math.PI / 2;  // Rotate to make it flat
-    scene.add(earthOrbit);
+    // // Earth orbit visualization
+    // const earthOrbitGeo = new THREE.RingGeometry(39.99, 40., 64);
+    // const orbitMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    // const earthOrbit = new THREE.Mesh(earthOrbitGeo, orbitMaterial);
+    // earthOrbit.rotation.x = Math.PI / 2;  // Rotate to make it flat
+    // scene.add(earthOrbit);
+
+
+        // Orbit visualization for planets
+        const createOrbit = (radius) => {
+          const orbitGeo = new THREE.RingGeometry(radius - 0.01, radius, 64);
+          const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+          const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+          orbit.rotation.x = Math.PI / 2;
+          return orbit;
+        };
+
+        scene.add(createOrbit(20)); // Mercury orbit
+        scene.add(createOrbit(30)); // Venus orbit
+        scene.add(createOrbit(40)); // Earth orbit
+        scene.add(createOrbit(70)); // Mars orbit
+
+
+
 
 
 
