@@ -38,9 +38,9 @@ const SolarSystem = () => {
     const fov = 75;
     const aspect = w / h;
     const near = 0.1;
-    const far = 10000;
+    const far = 100000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 20, 100);
+    camera.position.set(0, 20, 300);
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -53,6 +53,7 @@ const SolarSystem = () => {
     controls.enableZoom = true;
     controls.enablePan = true;
     controls.target.set(0, 0, 0);
+    controls.maxDistance = 50000;
 
 
 
@@ -76,7 +77,7 @@ const SolarSystem = () => {
     // const neptuneRingTexture = textureLoader.load(neptuneRingTextureUrl);
 
     // Create the sun
-    const sunGeo = new THREE.SphereGeometry(10, 64, 64);
+    const sunGeo = new THREE.SphereGeometry(20, 64, 64);
     const sunMat = new THREE.MeshBasicMaterial({
       map: sunTexture,
       roughness: 1,
@@ -91,7 +92,7 @@ const SolarSystem = () => {
     scene.add(sunMesh);
 
     // Lighting to simulate the Sun's effect
-    const sunLight = new THREE.PointLight(0xffffff, 1, 1000);
+    const sunLight = new THREE.PointLight(0xffffff, 2, 10000);
     sunLight.position.set(0, 0, 0);
     sunLight.castShadow = true;  // Enable shadow casting for Sun
     scene.add(sunLight);
@@ -102,7 +103,7 @@ const SolarSystem = () => {
 
     // Function to create a planet
     const createPlanet = (radius, texture, position, speed) => {
-      const geo = new THREE.SphereGeometry(radius, 32, 32);
+      const geo = new THREE.SphereGeometry(radius, 64, 64);
       const mat = new THREE.MeshStandardMaterial({
         map: texture,
         roughness: 0.7,
@@ -115,8 +116,8 @@ const SolarSystem = () => {
       return { mesh, speed, angle: 0 };
     };
 
-    const mercury = createPlanet(1.0, mercuryTexture, 30, 0.01);
-    const venus = createPlanet(1.7, venusTexture, 60, 0.008);
+    const mercury = createPlanet(1.0, mercuryTexture, 40, 0.01);
+    const venus = createPlanet(1.7, venusTexture, 70, 0.008);
     const earth = createPlanet(2, earthTexture, 100, 0.005);
     const mars = createPlanet(1.2, marsTexture, 150, 0.003);
     const jupiter = createPlanet(4, jupiterTexture, 250, 0.002);
@@ -161,7 +162,7 @@ const createRingWithTilt = (innerRadius, outerRadius, texture, planetMesh, tiltX
 // Adding realistic rings with tilts
 
 // Add rings to Jupiter (tilt of 3.1 degrees)
-createRingWithTilt(8, 15, jupiterRingTexture, jupiter.mesh, 3.1, 0);
+createRingWithTilt(9, 15, jupiterRingTexture, jupiter.mesh, 3.1, 0);
 
 // Add rings to Saturn (tilt of 26.7 degrees)
 createRingWithTilt(9, 18, saturnRingTexture, saturn.mesh, 26.7, 0);
@@ -199,14 +200,14 @@ createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
 
             // Orbits
     const createOrbit = (distance) => {
-      const orbitGeo = new THREE.RingGeometry(distance - 0.01, distance + 0.01, 64);
+      const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
       const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
       const orbit = new THREE.Mesh(orbitGeo, orbitMat);
       orbit.rotation.x = Math.PI / 2;
       scene.add(orbit);
     };
 
-    [20, 30, 40, 50, 70, 90, 110, 130].forEach(createOrbit);
+    [40, 70, 100, 150, 250, 400, 600, 800].forEach(createOrbit);
 
 
 
@@ -238,36 +239,36 @@ createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
 
       // Rotate planets around the Sun (speed adjusted proportionally)
       mercury.angle += earthBaseSpeed * (365 / 88);  // Mercury takes 88 days to orbit the sun
-      mercury.mesh.position.set(Math.cos(mercury.angle) * 20, 0, Math.sin(mercury.angle) * 20);
+      mercury.mesh.position.set(Math.cos(mercury.angle) * 40, 0, Math.sin(mercury.angle) * 40);
       mercury.mesh.rotation.y += 0.01;
 
       venus.angle += earthBaseSpeed * (365 / 225);  // Venus takes 225 days
-      venus.mesh.position.set(Math.cos(venus.angle) * 30, 0, Math.sin(venus.angle) * 30);
+      venus.mesh.position.set(Math.cos(venus.angle) * 70, 0, Math.sin(venus.angle) * 70);
       venus.mesh.rotation.y += 0.01;
 
       earth.angle += earthBaseSpeed;  // Earth's speed as base
-      earth.mesh.position.set(Math.cos(earth.angle) * 40, 0, Math.sin(earth.angle) * 40);
+      earth.mesh.position.set(Math.cos(earth.angle) * 100, 0, Math.sin(earth.angle) * 100);
       earth.mesh.rotation.y += 0.01;
       moonOrbit.rotation.y = t * 0.0015;
 
       mars.angle += earthBaseSpeed * (365 / 687);  // Mars takes 687 days
-      mars.mesh.position.set(Math.cos(mars.angle) * 50, 0, Math.sin(mars.angle) * 50);
+      mars.mesh.position.set(Math.cos(mars.angle) * 150, 0, Math.sin(mars.angle) * 150);
       mars.mesh.rotation.y += 0.01;
 
       jupiter.angle += earthBaseSpeed * (365 / 4333);  // Jupiter takes 4333 days
-      jupiter.mesh.position.set(Math.cos(jupiter.angle) * 70, 0, Math.sin(jupiter.angle) * 70);
+      jupiter.mesh.position.set(Math.cos(jupiter.angle) * 250, 0, Math.sin(jupiter.angle) * 250);
       jupiter.mesh.rotation.y += 0.01;
 
       saturn.angle += earthBaseSpeed * (365 / 10759);  // Saturn takes 10759 days
-      saturn.mesh.position.set(Math.cos(saturn.angle) * 90, 0, Math.sin(saturn.angle) * 90);
+      saturn.mesh.position.set(Math.cos(saturn.angle) * 400, 0, Math.sin(saturn.angle) * 400);
       saturn.mesh.rotation.y += 0.01;
 
       uranus.angle += earthBaseSpeed * (365 / 30687);  // Uranus takes 30687 days
-      uranus.mesh.position.set(Math.cos(uranus.angle) * 110, 0, Math.sin(uranus.angle) * 110);
+      uranus.mesh.position.set(Math.cos(uranus.angle) * 600, 0, Math.sin(uranus.angle) * 600);
       uranus.mesh.rotation.y += 0.01;
 
       neptune.angle += earthBaseSpeed * (365 / 60190);  // Neptune takes 60190 days
-      neptune.mesh.position.set(Math.cos(neptune.angle) * 130, 0, Math.sin(neptune.angle) * 130);
+      neptune.mesh.position.set(Math.cos(neptune.angle) * 800, 0, Math.sin(neptune.angle) * 800);
       neptune.mesh.rotation.y += 0.01;
 
       // Update controls and render scene
@@ -276,29 +277,29 @@ createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
     };
 
 
-    // Create far starfield
-    const createFarStarfield = () => {
-      const starGeometry = new THREE.BufferGeometry();
-      const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5 });
-      const starVertices = [];
-      const minDistance = 300;
-      const maxDistance = 1000;
+    // // Create far starfield
+    // const createFarStarfield = () => {
+    //   const starGeometry = new THREE.BufferGeometry();
+    //   const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5 });
+    //   const starVertices = [];
+    //   const minDistance = 300;
+    //   const maxDistance = 1000;
 
-      for (let i = 0; i < 10000; i++) {
-        const x = THREE.MathUtils.randFloatSpread(maxDistance);
-        const y = THREE.MathUtils.randFloatSpread(maxDistance);
-        const z = THREE.MathUtils.randFloatSpread(maxDistance);
-        const distance = Math.sqrt(x * x + y * y + z * z);
-        if (distance > minDistance) {
-          starVertices.push(x, y, z);
-        }
-      }
+    //   for (let i = 0; i < 10000; i++) {
+    //     const x = THREE.MathUtils.randFloatSpread(maxDistance);
+    //     const y = THREE.MathUtils.randFloatSpread(maxDistance);
+    //     const z = THREE.MathUtils.randFloatSpread(maxDistance);
+    //     const distance = Math.sqrt(x * x + y * y + z * z);
+    //     if (distance > minDistance) {
+    //       starVertices.push(x, y, z);
+    //     }
+    //   }
 
-      starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-      const stars = new THREE.Points(starGeometry, starMaterial);
-      scene.add(stars);
-    };
-    createFarStarfield();
+    //   starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+    //   const stars = new THREE.Points(starGeometry, starMaterial);
+    //   scene.add(stars);
+    // };
+    // createFarStarfield();
 
     animate();
 
