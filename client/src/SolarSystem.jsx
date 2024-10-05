@@ -1,4 +1,4 @@
-import React, { useEffect, useRef,  } from 'react';
+import React, { useEffect, useRef, } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -59,7 +59,7 @@ const SolarSystem = () => {
     const near = 0.1;
     const far = 100000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 500, 1000);
+    camera.position.set(0, 50, 1000);
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -95,12 +95,12 @@ const SolarSystem = () => {
     const uranusRingTexture = textureLoader.load(uranusRingTextureUrl);
     // const neptuneRingTexture = textureLoader.load(neptuneRingTextureUrl);
     const moonTextureMap = textureLoader.load(moonTexture);
-const phobosTextureMap = textureLoader.load(phobosTexture);
-const deimosTextureMap = textureLoader.load(deimosTexture);
-const ioTextureMap = textureLoader.load(ioTexture);
-const europaTextureMap = textureLoader.load(europaTexture);
-const ganymedeTextureMap = textureLoader.load(ganymedeTexture);
-const callistoTextureMap = textureLoader.load(callistoTexture);
+    const phobosTextureMap = textureLoader.load(phobosTexture);
+    const deimosTextureMap = textureLoader.load(deimosTexture);
+    const ioTextureMap = textureLoader.load(ioTexture);
+    const europaTextureMap = textureLoader.load(europaTexture);
+    const ganymedeTextureMap = textureLoader.load(ganymedeTexture);
+    const callistoTextureMap = textureLoader.load(callistoTexture);
 
 
 
@@ -109,11 +109,11 @@ const callistoTextureMap = textureLoader.load(callistoTexture);
 
 
     // Skybox Setup
-const loader = new THREE.CubeTextureLoader();
-const skyboxTexture = loader.load([px, nx, py, ny, pz, nz]);
+    const loader = new THREE.CubeTextureLoader();
+    const skyboxTexture = loader.load([px, nx, py, ny, pz, nz]);
 
-// Apply the skybox as the scene's background
-scene.background = skyboxTexture;
+    // Apply the skybox as the scene's background
+    scene.background = skyboxTexture;
 
 
 
@@ -178,46 +178,46 @@ scene.background = skyboxTexture;
 
 
 
-        // Add planets to scene
-        [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune].forEach(planet => {
-          scene.add(planet.mesh);
-        });
+    // Add planets to scene
+    [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune].forEach(planet => {
+      scene.add(planet.mesh);
+    });
 
 
 
 
 
-// Function to create a ring with tilt
-const createRingWithTilt = (innerRadius, outerRadius, texture, planetMesh, tiltX, tiltZ) => {
-  const ringGeo = new THREE.RingGeometry(innerRadius, outerRadius, 64);
-  const ringMat = new THREE.MeshBasicMaterial({
-    map: texture,
-    side: THREE.DoubleSide,
-    transparent: true,  // Ensure the texture is correctly transparent
-  });
-  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    // Function to create a ring with tilt
+    const createRingWithTilt = (innerRadius, outerRadius, texture, planetMesh, tiltX, tiltZ) => {
+      const ringGeo = new THREE.RingGeometry(innerRadius, outerRadius, 64);
+      const ringMat = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        transparent: true,  // Ensure the texture is correctly transparent
+      });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
 
-  // Set ring rotation to tilt the ring on X and Z axes
-  ringMesh.rotation.x = Math.PI / 2 + THREE.MathUtils.degToRad(tiltX);
-  ringMesh.rotation.z = THREE.MathUtils.degToRad(tiltZ);
+      // Set ring rotation to tilt the ring on X and Z axes
+      ringMesh.rotation.x = Math.PI / 2 + THREE.MathUtils.degToRad(tiltX);
+      ringMesh.rotation.z = THREE.MathUtils.degToRad(tiltZ);
 
-  planetMesh.add(ringMesh);  // Attach the ring to the planet mesh
-};
-      // Adding rings to the planets
+      planetMesh.add(ringMesh);  // Attach the ring to the planet mesh
+    };
+    // Adding rings to the planets
 
-// Adding realistic rings with tilts
+    // Adding realistic rings with tilts
 
-// Add rings to Jupiter (tilt of 3.1 degrees)
-createRingWithTilt(9, 15, jupiterRingTexture, jupiter.mesh, 3.1, 0);
+    // Add rings to Jupiter (tilt of 3.1 degrees)
+    createRingWithTilt(9, 15, jupiterRingTexture, jupiter.mesh, 3.1, 0);
 
-// Add rings to Saturn (tilt of 26.7 degrees)
-createRingWithTilt(9, 18, saturnRingTexture, saturn.mesh, 26.7, 0);
+    // Add rings to Saturn (tilt of 26.7 degrees)
+    createRingWithTilt(9, 18, saturnRingTexture, saturn.mesh, 26.7, 0);
 
-// Add rings to Uranus (tilt of 97.8 degrees, extreme tilt)
-createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
+    // Add rings to Uranus (tilt of 97.8 degrees, extreme tilt)
+    createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
 
-// Add rings to Neptune (tilt of 28.3 degrees)
-// createRingWithTilt(7, 14, neptuneRingTexture, neptune.mesh, 28.3, 0);
+    // Add rings to Neptune (tilt of 28.3 degrees)
+    // createRingWithTilt(7, 14, neptuneRingTexture, neptune.mesh, 28.3, 0);
 
 
 
@@ -237,51 +237,51 @@ createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
 
 
     // Orbits with different colors
-const createOrbit = (distance, color) => {
-  const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
-  const orbitMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
-  const orbit = new THREE.Mesh(orbitGeo, orbitMat);
-  orbit.rotation.x = Math.PI / 2;  // Rotate the ring to lie flat
-  scene.add(orbit);
-};
+    const createOrbit = (distance, color) => {
+      const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
+      const orbitMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
+      const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+      orbit.rotation.x = Math.PI / 2;  // Rotate the ring to lie flat
+      scene.add(orbit);
+    };
 
-// Different colors for each orbit
-const orbitColors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0xffa500];
+    // Different colors for each orbit
+    const orbitColors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0xffa500];
 
-// Distances for each planet's orbit
-const orbitDistances = [40, 70, 100, 150, 250, 400, 600, 800];
+    // Distances for each planet's orbit
+    const orbitDistances = [40, 70, 100, 150, 250, 400, 600, 800];
 
-// Create orbits with different colors
-orbitDistances.forEach((distance, index) => {
-  createOrbit(distance, orbitColors[index]);
-});
+    // Create orbits with different colors
+    orbitDistances.forEach((distance, index) => {
+      createOrbit(distance, orbitColors[index]);
+    });
 
-// // Planet Names
-// const planetNames = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
-// const planetNamePositions = [40, 70, 100, 150, 250, 400, 600, 800];
+    // // Planet Names
+    // const planetNames = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+    // const planetNamePositions = [40, 70, 100, 150, 250, 400, 600, 800];
 
-// // Create planet labels (sprites) for each planet
-// const createLabel = (name, distance) => {
-//   const canvas = document.createElement('canvas');
-//   const context = canvas.getContext('2d');
-//   context.font = 'Bold 40px Arial';
-//   context.fillStyle = 'white';
-//   context.fillText(name, 0, 40);
+    // // Create planet labels (sprites) for each planet
+    // const createLabel = (name, distance) => {
+    //   const canvas = document.createElement('canvas');
+    //   const context = canvas.getContext('2d');
+    //   context.font = 'Bold 40px Arial';
+    //   context.fillStyle = 'white';
+    //   context.fillText(name, 0, 40);
 
-//   const texture = new THREE.CanvasTexture(canvas);
-//   const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-//   const sprite = new THREE.Sprite(spriteMaterial);
+    //   const texture = new THREE.CanvasTexture(canvas);
+    //   const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+    //   const sprite = new THREE.Sprite(spriteMaterial);
 
-//   // Position the label above the planet (a little higher on Y-axis)
-//   sprite.position.set(distance, 20, 0);  // Adjust Y-axis as needed
-//   sprite.scale.set(50, 25, 1);  // Scale the label size
-//   scene.add(sprite);
-// };
+    //   // Position the label above the planet (a little higher on Y-axis)
+    //   sprite.position.set(distance, 20, 0);  // Adjust Y-axis as needed
+    //   sprite.scale.set(50, 25, 1);  // Scale the label size
+    //   scene.add(sprite);
+    // };
 
-// // Create planet labels for each planet
-// planetNames.forEach((name, index) => {
-//   createLabel(name, planetNamePositions[index]);
-// });
+    // // Create planet labels for each planet
+    // planetNames.forEach((name, index) => {
+    //   createLabel(name, planetNamePositions[index]);
+    // });
 
 
 
