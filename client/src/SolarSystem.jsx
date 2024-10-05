@@ -246,7 +246,7 @@ const SolarSystem = () => {
     };
 
     // Different colors for each orbit
-    const orbitColors = [0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500, 0xffa500];
+    const orbitColors = [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff];
 
     // Distances for each planet's orbit
     const orbitDistances = [40, 60, 80, 100, 130, 160, 190, 220];
