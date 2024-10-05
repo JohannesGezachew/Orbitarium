@@ -17,6 +17,14 @@ import jupiterRingTextureUrl from './assets/JupiterRings.png';
 import saturnRingTextureUrl from './assets/saturnringcolor.jpg';
 import uranusRingTextureUrl from './assets/uranusringcolour.jpg';
 // import neptuneRingTextureUrl from './assets/neptune_ring.png';
+import moonTexture from './assets/moonmap1k.jpg';   // Moon texture
+import phobosTexture from './assets/mar1kuu2.jpg'; // Phobos texture
+import deimosTexture from './assets/mar2kuu2.jpg'; // Deimos texture
+import ioTexture from './assets/Iomap.png';  // Io texture
+import europaTexture from './assets/Europa.jpg';  // Europa texture
+import ganymedeTexture from './assets/Dh_ganymede_texture.png';  // Ganymede texture
+import callistoTexture from './assets/Callisto-1.jpg';  // Callisto texture
+
 
 
 
@@ -86,6 +94,14 @@ const SolarSystem = () => {
     const saturnRingTexture = textureLoader.load(saturnRingTextureUrl);
     const uranusRingTexture = textureLoader.load(uranusRingTextureUrl);
     // const neptuneRingTexture = textureLoader.load(neptuneRingTextureUrl);
+    const moonTextureMap = textureLoader.load(moonTexture);
+const phobosTextureMap = textureLoader.load(phobosTexture);
+const deimosTextureMap = textureLoader.load(deimosTexture);
+const ioTextureMap = textureLoader.load(ioTexture);
+const europaTextureMap = textureLoader.load(europaTexture);
+const ganymedeTextureMap = textureLoader.load(ganymedeTexture);
+const callistoTextureMap = textureLoader.load(callistoTexture);
+
 
 
 
@@ -313,7 +329,7 @@ orbitDistances.forEach((distance, index) => {
       earth.angle += earthBaseSpeed;  // Earth's speed as base
       earth.mesh.position.set(Math.cos(earth.angle) * 100, 0, Math.sin(earth.angle) * 100);
       earth.mesh.rotation.y += 0.01;
-      moonOrbit.rotation.y = t * 0.0015;
+      // moonOrbit.rotation.y = t * 0.0015;
 
       mars.angle += earthBaseSpeed * (365 / 687);  // Mars takes 687 days
       mars.mesh.position.set(Math.cos(mars.angle) * 150, 0, Math.sin(mars.angle) * 150);
