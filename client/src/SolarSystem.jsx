@@ -18,6 +18,17 @@ import saturnRingTextureUrl from './assets/saturnringcolor.jpg';
 import uranusRingTextureUrl from './assets/uranusringcolour.jpg';
 // import neptuneRingTextureUrl from './assets/neptune_ring.png';
 
+
+
+import px from './assets/posX.jpg';
+import nx from './assets/negX.jpg';
+import py from './assets/posY.jpg';
+import ny from './assets/negY.jpg';
+import pz from './assets/posZ.jpg';
+import nz from './assets/negZ.jpg';
+
+
+
 const SolarSystem = () => {
   const mountRef = useRef(null);
 
@@ -40,7 +51,7 @@ const SolarSystem = () => {
     const near = 0.1;
     const far = 100000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 20, 300);
+    camera.position.set(0, 500, 1000);
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -75,6 +86,29 @@ const SolarSystem = () => {
     const saturnRingTexture = textureLoader.load(saturnRingTextureUrl);
     const uranusRingTexture = textureLoader.load(uranusRingTextureUrl);
     // const neptuneRingTexture = textureLoader.load(neptuneRingTextureUrl);
+
+
+
+
+
+
+    // Skybox Setup
+const loader = new THREE.CubeTextureLoader();
+const skyboxTexture = loader.load([px, nx, py, ny, pz, nz]);
+
+// Apply the skybox as the scene's background
+scene.background = skyboxTexture;
+
+
+
+
+
+
+
+
+
+
+
 
     // Create the sun
     const sunGeo = new THREE.SphereGeometry(20, 64, 64);
@@ -126,11 +160,7 @@ const SolarSystem = () => {
     const neptune = createPlanet(3, neptuneTexture, 800, 0.001);
 
 
-    // // Add planets to scene
-    // scene.add(mercury.mesh);
-    // scene.add(venus.mesh);
-    // scene.add(earth.mesh);
-    // scene.add(mars.mesh);
+
 
         // Add planets to scene
         [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune].forEach(planet => {
@@ -175,39 +205,73 @@ createRingWithTilt(8, 16, uranusRingTexture, uranus.mesh, 97.8, 0);
 
 
 
-    // // Earth orbit visualization
-    // const earthOrbitGeo = new THREE.RingGeometry(39.99, 40., 64);
-    // const orbitMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-    // const earthOrbit = new THREE.Mesh(earthOrbitGeo, orbitMaterial);
-    // earthOrbit.rotation.x = Math.PI / 2;  // Rotate to make it flat
-    // scene.add(earthOrbit);
 
 
-        // // Orbit visualization for planets
-        // const createOrbit = (radius) => {
-        //   const orbitGeo = new THREE.RingGeometry(radius - 0.01, radius, 64);
-        //   const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-        //   const orbit = new THREE.Mesh(orbitGeo, orbitMat);
-        //   orbit.rotation.x = Math.PI / 2;
-        //   return orbit;
-        // };
 
-        // scene.add(createOrbit(20)); // Mercury orbit
-        // scene.add(createOrbit(30)); // Venus orbit
-        // scene.add(createOrbit(40)); // Earth orbit
-        // scene.add(createOrbit(70)); // Mars orbit
+    //         // Orbits
+    // const createOrbit = (distance) => {
+    //   const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
+    //   const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    //   const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+    //   orbit.rotation.x = Math.PI / 2;
+    //   scene.add(orbit);
+    // };
+
+    // [40, 70, 100, 150, 250, 400, 600, 800].forEach(createOrbit);
 
 
-            // Orbits
-    const createOrbit = (distance) => {
-      const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
-      const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-      const orbit = new THREE.Mesh(orbitGeo, orbitMat);
-      orbit.rotation.x = Math.PI / 2;
-      scene.add(orbit);
-    };
+    // Orbits with different colors
+const createOrbit = (distance, color) => {
+  const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
+  const orbitMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
+  const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+  orbit.rotation.x = Math.PI / 2;  // Rotate the ring to lie flat
+  scene.add(orbit);
+};
 
-    [40, 70, 100, 150, 250, 400, 600, 800].forEach(createOrbit);
+// Different colors for each orbit
+const orbitColors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0xffa500];
+
+// Distances for each planet's orbit
+const orbitDistances = [40, 70, 100, 150, 250, 400, 600, 800];
+
+// Create orbits with different colors
+orbitDistances.forEach((distance, index) => {
+  createOrbit(distance, orbitColors[index]);
+});
+
+// // Planet Names
+// const planetNames = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+// const planetNamePositions = [40, 70, 100, 150, 250, 400, 600, 800];
+
+// // Create planet labels (sprites) for each planet
+// const createLabel = (name, distance) => {
+//   const canvas = document.createElement('canvas');
+//   const context = canvas.getContext('2d');
+//   context.font = 'Bold 40px Arial';
+//   context.fillStyle = 'white';
+//   context.fillText(name, 0, 40);
+
+//   const texture = new THREE.CanvasTexture(canvas);
+//   const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+//   const sprite = new THREE.Sprite(spriteMaterial);
+
+//   // Position the label above the planet (a little higher on Y-axis)
+//   sprite.position.set(distance, 20, 0);  // Adjust Y-axis as needed
+//   sprite.scale.set(50, 25, 1);  // Scale the label size
+//   scene.add(sprite);
+// };
+
+// // Create planet labels for each planet
+// planetNames.forEach((name, index) => {
+//   createLabel(name, planetNamePositions[index]);
+// });
+
+
+
+
+
+
 
 
 
