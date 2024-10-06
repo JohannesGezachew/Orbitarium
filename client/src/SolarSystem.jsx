@@ -2,6 +2,7 @@ import React, { useEffect, useRef, } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import gsap from 'gsap';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 // Import textures
 import earthTextureUrl from './assets/earthmap1k.jpg';
@@ -25,6 +26,12 @@ import uranusRingTextureUrl from './assets/uranusringcolour.jpg';
 // import europaTexture from './assets/Europa.jpg';  // Europa texture
 // import ganymedeTexture from './assets/Dh_ganymede_texture.png';  // Ganymede texture
 // import callistoTexture from './assets/Callisto-1.jpg';  // Callisto texture
+
+
+// Import the new celestial objects
+import DwarfPlanets from './components/DwarfPlanet';
+import Moons from './components/Moons';
+import Asteroids from './components/Asteroids';
 
 
 
@@ -111,6 +118,8 @@ const SolarSystem = () => {
     // Apply the skybox as the scene's background
     scene.background = skyboxTexture;
 
+
+
     // Create the sun
     const sunGeo = new THREE.SphereGeometry(20, 64, 64);
     const sunMat = new THREE.MeshBasicMaterial({
@@ -118,7 +127,7 @@ const SolarSystem = () => {
       roughness: 1,
       metalness: 0.5,
       emissive: new THREE.Color(0xffffff),
-      emissiveIntensity: 2,
+      emissiveIntensity: 200,
     });
     const sunMesh = new THREE.Mesh(sunGeo, sunMat);
     sunMesh.position.set(0, 0, 0);
@@ -134,7 +143,7 @@ const SolarSystem = () => {
     scene.add(sunLight);
 
     // Add Ambient light
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    const ambientLight = new THREE.AmbientLight(0x404040, 20);
     scene.add(ambientLight);
 
     // Function to create a planet
@@ -190,9 +199,6 @@ const SolarSystem = () => {
 
       planetMesh.add(ringMesh);  // Attach the ring to the planet mesh
     };
-    // Adding rings to the planets
-
-    // Adding realistic rings with tilts
 
     // Add rings to Jupiter (tilt of 3.1 degrees)
     createRingWithTilt(5, 9, jupiterRingTexture, jupiter.mesh, 3.1, 0);
@@ -202,9 +208,6 @@ const SolarSystem = () => {
 
     // Add rings to Uranus (tilt of 97.8 degrees, extreme tilt)
     createRingWithTilt(5, 10, uranusRingTexture, uranus.mesh, 97.8, 0);
-
-    // Add rings to Neptune (tilt of 28.3 degrees)
-    // createRingWithTilt(7, 14, neptuneRingTexture, neptune.mesh, 28.3, 0);
 
 
 
@@ -268,8 +271,6 @@ const SolarSystem = () => {
     window.addEventListener('click', onClick);
 
 
-
-
     //         // Orbits
     // const createOrbit = (distance) => {
     //   const orbitGeo = new THREE.RingGeometry(distance - 0.1, distance + 0.1, 64);
@@ -302,32 +303,32 @@ const SolarSystem = () => {
       createOrbit(distance, orbitColors[index]);
     });
 
-    // // Planet Names
-    // const planetNames = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
-    // const planetNamePositions = [40, 70, 100, 150, 250, 400, 600, 800];
+    // Planet Names
+    const planetNames = ["Sun","Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+    const planetNamePositions = [0,40, 60, 95, 150, 200, 240, 300, 340];
 
-    // // Create planet labels (sprites) for each planet
-    // const createLabel = (name, distance) => {
-    //   const canvas = document.createElement('canvas');
-    //   const context = canvas.getContext('2d');
-    //   context.font = 'Bold 40px Arial';
-    //   context.fillStyle = 'white';
-    //   context.fillText(name, 0, 40);
+    // Create planet labels (sprites) for each planet
+    const createLabel = (name, distance) => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      context.font = 'Bold 30px Arial';
+      context.fillStyle = 'white';
+      context.fillText(name, 0, 40);
 
-    //   const texture = new THREE.CanvasTexture(canvas);
-    //   const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-    //   const sprite = new THREE.Sprite(spriteMaterial);
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+      const sprite = new THREE.Sprite(spriteMaterial);
 
-    //   // Position the label above the planet (a little higher on Y-axis)
-    //   sprite.position.set(distance, 20, 0);  // Adjust Y-axis as needed
-    //   sprite.scale.set(50, 25, 1);  // Scale the label size
-    //   scene.add(sprite);
-    // };
+      // Position the label above the planet (a little higher on Y-axis)
+      sprite.position.set(distance, 20, 0);  // Adjust Y-axis as needed
+      sprite.scale.set(50, 25, 1);  // Scale the label size
+      scene.add(sprite);
+    };
 
-    // // Create planet labels for each planet
-    // planetNames.forEach((name, index) => {
-    //   createLabel(name, planetNamePositions[index]);
-    // });
+    // Create planet labels for each planet
+    planetNames.forEach((name, index) => {
+      createLabel(name, planetNamePositions[index]);
+    });
 
     // Create Moon's orbit pivot for Earth
     const moonOrbit = new THREE.Object3D();
@@ -343,7 +344,10 @@ const SolarSystem = () => {
     moonMesh.position.set(4, 0, 0);
     moonOrbit.add(moonMesh);
 
-
+     // ** Integrate new objects **
+     const dwarfPlanets = DwarfPlanets({ scene });
+     Asteroids({ scene });
+    //  Moons({ dwarfPlanet: dwarfPlanets.pluto.mesh });
 
     const animate = (t = 0) => {
       requestAnimationFrame(animate);
@@ -385,35 +389,20 @@ const SolarSystem = () => {
       neptune.mesh.position.set(Math.cos(neptune.angle) * 340, 0, Math.sin(neptune.angle) * 340);
       neptune.mesh.rotation.y += 0.01;
 
+
+            // Update for the new objects
+            dwarfPlanets.pluto.angle += dwarfPlanets.pluto.speed;
+            dwarfPlanets.pluto.mesh.position.set(
+              Math.cos(dwarfPlanets.pluto.angle) * 100,
+              0,
+              Math.sin(dwarfPlanets.pluto.angle) * 100
+            );
+
       // Update controls and render scene
       controls.update();
       renderer.render(scene, camera);
     };
 
-
-    // // Create far starfield
-    // const createFarStarfield = () => {
-    //   const starGeometry = new THREE.BufferGeometry();
-    //   const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5 });
-    //   const starVertices = [];
-    //   const minDistance = 300;
-    //   const maxDistance = 1000;
-
-    //   for (let i = 0; i < 10000; i++) {
-    //     const x = THREE.MathUtils.randFloatSpread(maxDistance);
-    //     const y = THREE.MathUtils.randFloatSpread(maxDistance);
-    //     const z = THREE.MathUtils.randFloatSpread(maxDistance);
-    //     const distance = Math.sqrt(x * x + y * y + z * z);
-    //     if (distance > minDistance) {
-    //       starVertices.push(x, y, z);
-    //     }
-    //   }
-
-    //   starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-    //   const stars = new THREE.Points(starGeometry, starMaterial);
-    //   scene.add(stars);
-    // };
-    // createFarStarfield();
 
     animate();
 
