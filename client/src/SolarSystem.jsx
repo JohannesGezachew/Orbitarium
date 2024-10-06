@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import gsap from 'gsap';
 
 // Import textures
 import earthTextureUrl from './assets/earthmap1k.jpg';
@@ -17,13 +18,13 @@ import jupiterRingTextureUrl from './assets/JupiterRings.png';
 import saturnRingTextureUrl from './assets/saturnringcolor.jpg';
 import uranusRingTextureUrl from './assets/uranusringcolour.jpg';
 // import neptuneRingTextureUrl from './assets/neptune_ring.png';
-import moonTexture from './assets/moonmap1k.jpg';   // Moon texture
-import phobosTexture from './assets/mar1kuu2.jpg'; // Phobos texture
-import deimosTexture from './assets/mar2kuu2.jpg'; // Deimos texture
-import ioTexture from './assets/Iomap.png';  // Io texture
-import europaTexture from './assets/Europa.jpg';  // Europa texture
-import ganymedeTexture from './assets/Dh_ganymede_texture.png';  // Ganymede texture
-import callistoTexture from './assets/Callisto-1.jpg';  // Callisto texture
+// import moonTexture from './assets/moonmap1k.jpg';   // Moon texture
+// import phobosTexture from './assets/mar1kuu2.jpg'; // Phobos texture
+// import deimosTexture from './assets/mar2kuu2.jpg'; // Deimos texture
+// import ioTexture from './assets/Iomap.png';  // Io texture
+// import europaTexture from './assets/Europa.jpg';  // Europa texture
+// import ganymedeTexture from './assets/Dh_ganymede_texture.png';  // Ganymede texture
+// import callistoTexture from './assets/Callisto-1.jpg';  // Callisto texture
 
 
 
@@ -59,7 +60,7 @@ const SolarSystem = () => {
     const near = 0.1;
     const far = 100000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 50, 500);
+    camera.position.set(0, 50, 200);
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -72,7 +73,7 @@ const SolarSystem = () => {
     controls.enableZoom = true;
     controls.enablePan = true;
     controls.target.set(0, 0, 0);
-    controls.maxDistance = 50000;
+    controls.maxDistance = 10000;
 
 
 
@@ -94,18 +95,13 @@ const SolarSystem = () => {
     const saturnRingTexture = textureLoader.load(saturnRingTextureUrl);
     const uranusRingTexture = textureLoader.load(uranusRingTextureUrl);
     // const neptuneRingTexture = textureLoader.load(neptuneRingTextureUrl);
-    const moonTextureMap = textureLoader.load(moonTexture);
-    const phobosTextureMap = textureLoader.load(phobosTexture);
-    const deimosTextureMap = textureLoader.load(deimosTexture);
-    const ioTextureMap = textureLoader.load(ioTexture);
-    const europaTextureMap = textureLoader.load(europaTexture);
-    const ganymedeTextureMap = textureLoader.load(ganymedeTexture);
-    const callistoTextureMap = textureLoader.load(callistoTexture);
-
-
-
-
-
+    // const moonTextureMap = textureLoader.load(moonTexture);
+    // const phobosTextureMap = textureLoader.load(phobosTexture);
+    // const deimosTextureMap = textureLoader.load(deimosTexture);
+    // const ioTextureMap = textureLoader.load(ioTexture);
+    // const europaTextureMap = textureLoader.load(europaTexture);
+    // const ganymedeTextureMap = textureLoader.load(ganymedeTexture);
+    // const callistoTextureMap = textureLoader.load(callistoTexture);
 
 
     // Skybox Setup
@@ -114,17 +110,6 @@ const SolarSystem = () => {
 
     // Apply the skybox as the scene's background
     scene.background = skyboxTexture;
-
-
-
-
-
-
-
-
-
-
-
 
     // Create the sun
     const sunGeo = new THREE.SphereGeometry(20, 64, 64);
@@ -137,6 +122,7 @@ const SolarSystem = () => {
     });
     const sunMesh = new THREE.Mesh(sunGeo, sunMat);
     sunMesh.position.set(0, 0, 0);
+    sunMesh.name = 'Sun';
     sunMesh.castShadow = false;  // Add this line
     sunMesh.receiveShadow = true;  // Add this line
     scene.add(sunMesh);
@@ -152,7 +138,7 @@ const SolarSystem = () => {
     scene.add(ambientLight);
 
     // Function to create a planet
-    const createPlanet = (radius, texture, position, speed) => {
+    const createPlanet = (name,radius, texture, position, speed) => {
       const geo = new THREE.SphereGeometry(radius, 64, 64);
       const mat = new THREE.MeshStandardMaterial({
         map: texture,
@@ -160,20 +146,21 @@ const SolarSystem = () => {
         metalness: 0,
       });
       const mesh = new THREE.Mesh(geo, mat);
+      mesh.name = name;// name for identification
       mesh.position.set(position, 0, 0);
       mesh.castShadow = true;  // Add this line
       mesh.receiveShadow = true;  // Add this line
       return { mesh, speed, angle: 0 };
     };
 
-    const mercury = createPlanet(1.0, mercuryTexture, 40, 0.01);
-    const venus = createPlanet(1.7, venusTexture, 60, 0.008);
-    const earth = createPlanet(2, earthTexture, 80, 0.005);
-    const mars = createPlanet(1.2, marsTexture, 100, 0.003);
-    const jupiter = createPlanet(4, jupiterTexture, 130, 0.002);
-    const saturn = createPlanet(3.5, saturnTexture, 160, 0.0018);
-    const uranus = createPlanet(3, uranusTexture, 190, 0.0012);
-    const neptune = createPlanet(3, neptuneTexture, 220, 0.001);
+    const mercury = createPlanet('Mercury',1.0, mercuryTexture, 40, 0.01);
+    const venus = createPlanet('Venus',1.7, venusTexture, 60, 0.008);
+    const earth = createPlanet('Earth',2, earthTexture, 95, 0.005);
+    const mars = createPlanet('Mars',1.2, marsTexture, 150, 0.003);
+    const jupiter = createPlanet('Jupiter',4, jupiterTexture, 200, 0.002);
+    const saturn = createPlanet('Saturn',3.5, saturnTexture, 240, 0.0018);
+    const uranus = createPlanet('Uranus',3, uranusTexture, 300, 0.0012);
+    const neptune = createPlanet('Neptune',3, neptuneTexture, 340, 0.001);
 
 
 
@@ -221,6 +208,65 @@ const SolarSystem = () => {
 
 
 
+    // Raycaster setup
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    // Smooth Zoom function
+    const smoothZoom = (camera, target, controls) => {
+      gsap.to(camera.position, {
+        x: target.position.x + 5, // Adjust offset as needed
+        y: target.position.y + 5,
+        z: target.position.z + 15,
+        duration: 1.5,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          camera.lookAt(target.position);
+          controls.target.copy(target.position);
+          controls.update();
+        },
+      });
+    };
+
+        // // this one is dynamic Zoom function
+        // const smoothZoom = (camera, target, controls) => {
+        //   const distance = 50; // Set a default distance from the target object
+
+        //   gsap.to(camera.position, {
+        //     x: target.position.x + distance,
+        //     y: target.position.y + distance,
+        //     z: target.position.z + distance * 1.5, // Increase for more distance on zoom
+        //     duration: 1.5,
+        //     ease: 'power2.inOut',
+        //     onUpdate: () => {
+        //       camera.lookAt(target.position);
+        //       controls.target.copy(target.position);
+        //       controls.update();
+        //     },
+        //   });
+
+
+    // Click handler to zoom into the clicked planet
+    const onClick = (event) => {
+      event.preventDefault();
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(scene.children, true);
+
+      if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        console.log('Clicked object:', clickedObject.name); // Check the name
+        if (clickedObject && clickedObject.name) {
+          smoothZoom(camera, clickedObject, controls);
+        }
+      }
+    };
+
+    window.addEventListener('click', onClick);
+
 
 
 
@@ -249,7 +295,7 @@ const SolarSystem = () => {
     const orbitColors = [0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff];
 
     // Distances for each planet's orbit
-    const orbitDistances = [40, 60, 80, 100, 130, 160, 190, 220];
+    const orbitDistances = [40, 60, 95, 150, 200, 240, 300, 340];
 
     // Create orbits with different colors
     orbitDistances.forEach((distance, index) => {
@@ -283,18 +329,6 @@ const SolarSystem = () => {
     //   createLabel(name, planetNamePositions[index]);
     // });
 
-
-
-
-
-
-
-
-
-
-
-
-
     // Create Moon's orbit pivot for Earth
     const moonOrbit = new THREE.Object3D();
     moonOrbit.position.set(0, 0, 0);
@@ -327,28 +361,28 @@ const SolarSystem = () => {
       venus.mesh.rotation.y += 0.01;
 
       earth.angle += earthBaseSpeed;  // Earth's speed as base
-      earth.mesh.position.set(Math.cos(earth.angle) * 80, 0, Math.sin(earth.angle) * 80);
+      earth.mesh.position.set(Math.cos(earth.angle) * 95, 0, Math.sin(earth.angle) * 95);
       earth.mesh.rotation.y += 0.01;
       moonOrbit.rotation.y = t * 0.0015;
 
       mars.angle += earthBaseSpeed * (365 / 687);  // Mars takes 687 days
-      mars.mesh.position.set(Math.cos(mars.angle) * 100, 0, Math.sin(mars.angle) * 100);
+      mars.mesh.position.set(Math.cos(mars.angle) * 150, 0, Math.sin(mars.angle) * 150);
       mars.mesh.rotation.y += 0.01;
 
       jupiter.angle += earthBaseSpeed * (365 / 4333);  // Jupiter takes 4333 days
-      jupiter.mesh.position.set(Math.cos(jupiter.angle) * 130, 0, Math.sin(jupiter.angle) * 130);
+      jupiter.mesh.position.set(Math.cos(jupiter.angle) * 200, 0, Math.sin(jupiter.angle) * 200);
       jupiter.mesh.rotation.y += 0.01;
 
       saturn.angle += earthBaseSpeed * (365 / 10759);  // Saturn takes 10759 days
-      saturn.mesh.position.set(Math.cos(saturn.angle) * 160, 0, Math.sin(saturn.angle) * 160);
+      saturn.mesh.position.set(Math.cos(saturn.angle) * 240, 0, Math.sin(saturn.angle) * 240);
       saturn.mesh.rotation.y += 0.01;
 
       uranus.angle += earthBaseSpeed * (365 / 30687);  // Uranus takes 30687 days
-      uranus.mesh.position.set(Math.cos(uranus.angle) * 190, 0, Math.sin(uranus.angle) * 190);
+      uranus.mesh.position.set(Math.cos(uranus.angle) * 300, 0, Math.sin(uranus.angle) * 300);
       uranus.mesh.rotation.y += 0.01;
 
       neptune.angle += earthBaseSpeed * (365 / 60190);  // Neptune takes 60190 days
-      neptune.mesh.position.set(Math.cos(neptune.angle) * 220, 0, Math.sin(neptune.angle) * 220);
+      neptune.mesh.position.set(Math.cos(neptune.angle) * 340, 0, Math.sin(neptune.angle) * 340);
       neptune.mesh.rotation.y += 0.01;
 
       // Update controls and render scene
