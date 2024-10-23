@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const Asteroids = ({ scene }) => {
+const AsteroidElements = ({ scene }) => {
   const asteroids = new THREE.Group();
   const numAsteroids = 1000;
 
@@ -40,4 +40,4 @@ const Asteroids = ({ scene }) => {
   scene.add(asteroids);
 };
 
-export default Asteroids;
+export default AsteroidElements;

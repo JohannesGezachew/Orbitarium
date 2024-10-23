@@ -31,7 +31,7 @@ import uranusRingTextureUrl from './assets/uranusringcolour.jpg';
 // Import the new celestial objects
 import DwarfPlanets from './components/DwarfPlanet';
 import Moons from './components/Moons';
-import Asteroids from './components/Asteroids';
+import AsteroidElements from './components/Asteroids';
 
 
 
@@ -346,7 +346,7 @@ const SolarSystem = () => {
 
      // ** Integrate new objects **
      const dwarfPlanets = DwarfPlanets({ scene });
-     Asteroids({ scene });
+     AsteroidElements({ scene });
     //  Moons({ dwarfPlanet: dwarfPlanets.pluto.mesh });
 
     const animate = (t = 0) => {
