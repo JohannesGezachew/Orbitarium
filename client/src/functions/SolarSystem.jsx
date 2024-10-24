@@ -29,9 +29,9 @@ import uranusRingTextureUrl from './assets/uranusringcolour.jpg';
 
 
 // Import the new celestial objects
-import DwarfPlanets from './components/DwarfPlanet';
-import Moons from './components/Moons';
-import AsteroidElements from './components/Asteroids';
+import DwarfPlanets from '../components/DwarfPlanet';
+import Moons from '../components/Moons';
+import AsteroidElements from '../components/Asteroids';
 
 
 
